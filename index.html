@@ -1,21 +1,134 @@
-<!DOCTYPE html>
-<html lang="pt">
+ <!DOCTYPE html>
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Simulador de Eficiência Industrial</title>
   <style>
-    body { font-family: sans-serif; margin: 30px; background: #f4f6f8; }
-    .card { background: white; padding: 20px; border-radius: 8px; max-width: 500px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-    button { background: #0066cc; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; }
-    .metric { margin-top: 15px; font-weight: bold; }
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --background: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --success: #10b981;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background-color: var(--background);
+      color: var(--text-main);
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .card {
+      background: var(--card-bg);
+      padding: 32px;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+      border: 1px solid var(--border);
+    }
+
+    h2 {
+      margin-top: 0;
+      margin-bottom: 8px;
+      font-size: 1.25rem;
+      color: var(--text-main);
+    }
+
+    p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    button {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      transition: background-color 0.2s, transform 0.1s;
+    }
+
+    button:hover {
+      background-color: var(--primary-hover);
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    .metric {
+      margin-top: 24px;
+      display: none; /* Oculto inicialmente até gerar o primeiro resultado */
+      background: var(--background);
+      padding: 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .metric.visible {
+      display: block;
+    }
+
+    .metric-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+    }
+
+    .metric-item:last-child {
+      margin-bottom: 0;
+      padding-top: 8px;
+      border-top: 1px dashed var(--border);
+      font-weight: bold;
+      color: var(--success);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
 <body>
+
   <div class="card">
-    <h2>Linha de Produção - Métricas</h2>
-    <p>Simulação de indicadores operacionais em tempo real.</p>
+    <h2>Linha de Produção</h2>
+    <p>Simulação de indicadores operacionais em tempo real para controle de qualidade.</p>
+    
     <button onclick="simular()">Simular Ciclo</button>
-    <div id="resultado" class="metric"></div>
+    
+    <div id="resultado" class="metric">
+      <div class="metric-item">
+        <span>Peças válidas:</span>
+        <span id="val-boas">--</span>
+      </div>
+      <div class="metric-item">
+        <span>Defeitos:</span>
+        <span id="val-defeitos">--</span>
+      </div>
+      <div class="metric-item">
+        <span>Qualidade (FTY):</span>
+        <span id="val-qualidade">--</span>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -25,9 +138,18 @@
       const total = boas + defeitos;
       const qualidade = ((boas / total) * 100).toFixed(2);
       
-      document.getElementById("resultado").innerHTML = 
-        `Peças válidas: ${boas}<br>Defeitos: ${defeitos}<br>Qualidade (FTY): ${qualidade}%`;
+      // Atualiza os valores separadamente para manter a estrutura HTML limpa
+      document.getElementById("val-boas").innerText = boas;
+      document.getElementById("val-defeitos").innerText = defeitos;
+      document.getElementById("val-qualidade").innerText = qualidade + "%";
+      
+      // Torna a caixa de resultados visível com animação
+      const resultadoDiv = document.getElementById("resultado");
+      if (!resultadoDiv.classList.contains("visible")) {
+        resultadoDiv.classList.add("visible");
+      }
     }
   </script>
+
 </body>
 </html>
