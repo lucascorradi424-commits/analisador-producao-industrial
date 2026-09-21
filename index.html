@@ -1,24 +1,27 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Simulador de Eficiência Industrial</title>
+  <!-- Google Fonts para tipografia moderna -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #2563eb;
-      --primary-hover: #1d4ed8;
-      --background: #f8fafc;
-      --card-bg: #ffffff;
-      --text-main: #1e293b;
-      --text-muted: #64748b;
-      --border: #e2e8f0;
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --background: #0f172a;
+      --card-bg: #1e293b;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #334155;
       --success: #10b981;
+      --accent: #6366f1;
     }
 
     body {
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-      background-color: var(--background);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
       color: var(--text-main);
       margin: 0;
       min-height: 100vh;
@@ -29,57 +32,80 @@
 
     .card {
       background: var(--card-bg);
-      padding: 32px;
-      border-radius: 12px;
+      padding: 36px;
+      border-radius: 16px;
       width: 100%;
-      max-width: 420px;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+      max-width: 440px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
       border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Detalhe estético de brilho no topo do card */
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), #a855f7, var(--success));
+    }
+
+    .header-icon {
+      font-size: 2rem;
+      margin-bottom: 12px;
     }
 
     h2 {
       margin-top: 0;
       margin-bottom: 8px;
-      font-size: 1.25rem;
+      font-size: 1.5rem;
+      font-weight: 700;
       color: var(--text-main);
+      letter-spacing: -0.025em;
     }
 
     p {
       color: var(--text-muted);
       font-size: 0.95rem;
-      margin-bottom: 24px;
-      line-height: 1.5;
+      margin-bottom: 28px;
+      line-height: 1.6;
     }
 
     button {
-      background-color: var(--primary);
-      color: red;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+      color: #ffffff; /* Corrigido para branco legível */
       border: none;
-      padding: 12px 20px;
-      border-radius: 6px;
-      font-size: 0.95rem;
+      padding: 14px 20px;
+      border-radius: 8px;
+      font-size: 1rem;
       font-weight: 600;
       cursor: pointer;
       width: 100%;
-      transition: background-color 0.2s, transform 0.1s;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
+      transition: all 0.2s ease;
     }
 
     button:hover {
-      background-color: var(--primary-hover);
+      background: linear-gradient(135deg, var(--primary-hover) 0%, #4f46e5 100%);
+      box-shadow: 0 6px 16px rgba(79, 70, 229, 0.6);
+      transform: translateY(-1px);
     }
 
     button:active {
-      transform: scale(0.98);
+      transform: scale(0.98) translateY(0);
     }
 
     .metric {
       margin-top: 24px;
-      display: none; /* Oculto inicialmente até gerar o primeiro resultado */
-      background: var(--background);
-      padding: 16px;
-      border-radius: 8px;
+      display: none; 
+      background: rgba(15, 23, 42, 0.6);
+      padding: 20px;
+      border-radius: 10px;
       border: 1px solid var(--border);
-      animation: fadeIn 0.3s ease-in-out;
+      animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .metric.visible {
@@ -89,20 +115,33 @@
     .metric-item {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 8px;
-      font-size: 0.9rem;
+      align-items: center;
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+
+    .metric-item span:last-child {
+      font-weight: 600;
+      color: var(--text-main);
     }
 
     .metric-item:last-child {
       margin-bottom: 0;
-      padding-top: 8px;
+      padding-top: 12px;
       border-top: 1px dashed var(--border);
+      font-size: 1rem;
       font-weight: bold;
       color: var(--success);
     }
 
+    .metric-item:last-child span:last-child {
+      color: var(--success);
+      font-size: 1.1rem;
+    }
+
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(4px); }
+      from { opacity: 0; transform: translateY(8px); }
       to { opacity: 1; transform: translateY(0); }
     }
   </style>
@@ -110,22 +149,23 @@
 <body>
 
   <div class="card">
+    <div class="header-icon">🏭</div>
     <h2>Linha de Produção</h2>
-    <p>Simulação de indicadores operacionais em tempo real para controle de qualidade.</p>
+    <p>Simulação de indicadores operacionais em tempo real para controle de qualidade rigoroso.</p>
     
     <button onclick="simular()">Simular Ciclo</button>
     
     <div id="resultado" class="metric">
       <div class="metric-item">
-        <span>Peças válidas:</span>
+        <span>✅ Peças válidas:</span>
         <span id="val-boas">--</span>
       </div>
       <div class="metric-item">
-        <span>Defeitos:</span>
+        <span>⚠️ Defeitos:</span>
         <span id="val-defeitos">--</span>
       </div>
       <div class="metric-item">
-        <span>Qualidade (FTY):</span>
+        <span>📊 Qualidade (FTY):</span>
         <span id="val-qualidade">--</span>
       </div>
     </div>
@@ -138,7 +178,7 @@
       const total = boas + defeitos;
       const qualidade = ((boas / total) * 100).toFixed(2);
       
-      // Atualiza os valores separadamente para manter a estrutura HTML limpa
+      // Atualiza os valores separadamente
       document.getElementById("val-boas").innerText = boas;
       document.getElementById("val-defeitos").innerText = defeitos;
       document.getElementById("val-qualidade").innerText = qualidade + "%";
