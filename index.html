@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>Simulador de Eficiência Industrial</title>
+  <style>
+    body { font-family: sans-serif; margin: 30px; background: #f4f6f8; }
+    .card { background: white; padding: 20px; border-radius: 8px; max-width: 500px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    button { background: #0066cc; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; }
+    .metric { margin-top: 15px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Linha de Produção - Métricas</h2>
+    <p>Simulação de indicadores operacionais em tempo real.</p>
+    <button onclick="simular()">Simular Ciclo</button>
+    <div id="resultado" class="metric"></div>
+  </div>
+
+  <script>
+    function simular() {
+      const boas = Math.floor(Math.random() * 20) + 80;
+      const defeitos = Math.floor(Math.random() * 5);
+      const total = boas + defeitos;
+      const qualidade = ((boas / total) * 100).toFixed(2);
+      
+      document.getElementById("resultado").innerHTML = 
+        `Peças válidas: ${boas}<br>Defeitos: ${defeitos}<br>Qualidade (FTY): ${qualidade}%`;
+    }
+  </script>
+</body>
+</html>
